@@ -1,311 +1,195 @@
-# 📧 Email Campaign for General Event Attendees (email_AT.py)
+# AFRO-EXPRESS EVENTS
 
-A Python script for sending promotional emails to general event attendees who haven't been segmented into behavioral clusters.
+## Data Analysis, Customer Segmentation, and Strategic Insights
 
-## 🎯 Purpose
+This repository contains a complete data analysis and machine-learning
+workflow conducted for Afro-Express Events. The goal was to transform
+raw ticket sales data into actionable insights, segment the customer
+base, and provide strategic recommendations that improve ticket
+conversions, marketing efficiency, and overall event profitability.
 
-This script sends a standardized promotional email to all remaining attendees from the `remaining_attendees.csv` file. Unlike `testemail.py` which uses cluster-based personalization, this script sends the same message to everyone.
+------------------------------------------------------------------------
 
-## 📂 Project Structure
+## Table of Contents
 
-```
-afro-express-campaign/
-│
-├── testemail.py              # Cluster-based campaign (segmented attendees)
-├── email_AT.py               # This file - General attendees campaign
-├── email_attendees.csv       # Clustered attendees data
-├── remaining_attendees.csv   # General attendees data
-└── README.md                 # Documentation
-```
+1.  Project Overview
+2.  Key Findings & Behavioral Insights
+3.  Customer Segmentation (KMeans)
+4.  Strategic Recommendations
+5.  Technical Stack & Repository Structure
+6.  Setup & Execution
+7.  Contact
 
-## 🔄 Relationship to testemail.py
+------------------------------------------------------------------------
 
-| Feature | testemail.py | email_AT.py |
-|---------|--------------|-------------|
-| **Target Audience** | Segmented customers (Clusters 0, 1, 2) | General attendees (no clustering) |
-| **Data File** | `email_attendees.csv` | `remaining_attendees.csv` |
-| **Personalization** | 3 different messages by cluster | 1 standard message for all |
-| **Use Case** | High-value, repeat customers | New or unclassified attendees |
+## 1. Project Overview
 
-## ✨ Features
+Afro-Express events attract a loyal, culturally engaged audience, but
+purchasing behavior is highly time-sensitive, with the majority of sales
+occurring very close to event dates. The core purpose of this analysis
+was to:
 
-- **Batch Processing**: Sends 50 emails at a time with breaks
-- **Rate Limiting**: 12-second delays between emails to avoid spam flags
-- **Duplicate Prevention**: Automatically removes duplicate email addresses
-- **Row Selection**: Configurable start/end rows for controlled sending
-- **Progress Tracking**: Real-time delivery status updates
-- **Error Handling**: Continues sending even if some emails fail
-- **HTML Support**: Rich, visually appealing email format
+-   Understand **when and how** customers buy tickets\
+-   Classify customers into **high-impact segments** using KMeans\
+-   Deliver **strategic recommendations** for higher conversions\
+-   Build **email automation tools** for targeted engagement
 
-## 📋 Prerequisites
+------------------------------------------------------------------------
 
-### Required Python Libraries
-```bash
-pip install pandas
-```
+## 2. Key Findings & Behavioral Insights
 
-### Gmail Setup
-1. Enable **2-Factor Authentication** on your Gmail account
-2. Generate an **App Password**:
-   - Go to Google Account → Security → 2-Step Verification → App Passwords
-   - Create a new app password for "Mail"
-   - Copy the 16-character password
+The analysis uncovered strong patterns in purchase timing and buyer
+behavior.
 
-### Required Files
-- `remaining_attendees.csv` - Must contain these columns:
-  - `Buyer email` - Recipient email address
-  - `Buyer first name` - Recipient's first name
+### Behavioral Insights Summary
 
-## 🚀 Quick Start
+  -----------------------------------------------------------------------
+  Insight Category                          Key Finding
+  ----------------------------------------- -----------------------------
+  **Average Purchase Timing**               Customers buy **5 days
+                                            before** the event
 
-1. **Update credentials** in the script:
-   ```python
-   SENDER_EMAIL = "your-email@gmail.com"
-   SENDER_PASSWORD = "your-app-password"
-   ```
+  **Last-Minute Sales**                     **50% of sales occur the
+                                            night before / day of event**
 
-2. **Configure row range** (optional):
-   ```python
-   df = df.iloc[606:640]  # Adjust start:end rows
-   ```
+  **Time of Day**                           Highest activity: **Evening
+                                            (40%)**, **Afternoon (30%)**
 
-3. **Run the script**:
-   ```bash
-   python email_AT.py
-   ```
+  **Top Locations**                         Austin, Houston, Dallas, San
+                                            Antonio (Texas)
 
-## ⚙️ Configuration
+  **Demographics**                          Balanced gender mix;
+                                            Afro-diasporic audience
+  -----------------------------------------------------------------------
 
-### Row Selection Options
+------------------------------------------------------------------------
 
-```python
-# Send to ALL remaining attendees
-df = df.iloc[:]
+## 3. Customer Segmentation (KMeans)
 
-# Send to first 250 rows
-df = df.iloc[:250]
+KMeans clustering grouped attendees into three actionable segments:
 
-# Send rows 251-450
-df = df.iloc[250:450]
+### Cluster Summary
 
-# Send rows 606-640 (as currently configured)
-df = df.iloc[606:640]
-```
+  -------------------------------------------------------------------------
+  Cluster     Description    Purchase Behavior     Recommended Strategy
+  ----------- -------------- --------------------- ------------------------
+  **Cluster   Early Planners Buys \~14 days before Early-bird discounts,
+  0**                        event                 exclusive access
 
-### Batch Settings
+  **Cluster   Last-Minute    Buys \<7 days before  Urgency messaging,
+  1**         Buyers         event; spontaneous    countdown campaigns
 
-```python
-BATCH_SIZE = 50        # Emails per batch
-BATCH_DELAY = 300      # Seconds between batches (5 minutes)
-EMAIL_DELAY = 12       # Seconds between individual emails
-```
+  **Cluster   Group /        Highest per-order     Group deals, VIP
+  2**         High-Value     spend                 upgrades, loyalty perks
+              Buyers                               
+  -------------------------------------------------------------------------
 
-### Email Content
+------------------------------------------------------------------------
 
-To modify the email, edit the `get_email_content()` function:
-```python
-def get_email_content(first_name):
-    subject = "Your subject here"
-    body = """Your HTML content here"""
-    return subject, body
-```
+## 4. Strategic Recommendations
 
-## 📧 Email Template
+### 1. Optimize Pricing by Timing
 
-The script sends a single standardized message:
+Introduce tiered pricing with increases **5--7 days before the event**
+to encourage earlier purchases.
 
-- **Subject**: "🎟️ LAST CALL — Lock in Your Ticket for Cash Cobain X DJ Tunez at AfroTech!"
-- **Content**: 
-  - Personalized greeting using first name
-  - Event details (date, time, location)
-  - Featured artists (Cash Cobain & DJ Tunez)
-  - Call-to-action button for ticket purchase
-  - Event flyer image
+### 2. Personalized Outreach
 
-## 🛡️ Safety Guidelines
+Use cluster-specific promotions, such as: - Early-bird deals for Cluster
+0\
+- Urgency messaging for Cluster 1\
+- Group-ticket/VIP offers for Cluster 2
 
-### Daily Sending Limits
-- **Gmail Regular Account**: 500 emails/day max
-- **Recommended**: 200-250 emails per day for safety
-- **First Campaign**: Start with 100-150 emails
+### 3. Strengthen Cultural Messaging
 
-### Multi-Day Campaign Strategy
+Highlight community, Afro-vibes, and cultural celebration---core
+motivators for the audience.
 
-For 640 remaining attendees:
-```
-Day 1: Rows 0-200     (200 emails)
-Day 2: Rows 200-400   (200 emails)
-Day 3: Rows 400-600   (200 emails)
-Day 4: Rows 600-640   (40 emails)
-```
+### 4. Retention & Loyalty
 
-Update the row range each day:
-```python
-# Day 1
-df = df.iloc[0:200]
+Reward frequent attendees to reduce acquisition costs and grow lifetime
+value.
 
-# Day 2
-df = df.iloc[200:400]
+------------------------------------------------------------------------
 
-# Day 3
-df = df.iloc[400:600]
+## 5. Technical Stack & Repository Structure
 
-# Day 4
-df = df.iloc[600:640]
+### Technology Stack
+
+-   **Language:** Python\
+-   **Libraries:** pandas, numpy, matplotlib, seaborn, plotly.express\
+-   **ML Tools:** scikit-learn (KMeans, PCA, silhouette_score)\
+-   **Email Automation:** smtplib, email.mime
+
+### Repository Files
+
+  -------------------------------------------------------------------------
+  File                     Description
+  ------------------------ ------------------------------------------------
+  **AFRO-EXPRESS.ipynb**   Main notebook: cleaning, EDA, clustering,
+                           visualizations
+
+  **AFRO-EXPRESS           Detailed analytical documentation
+  DOCUMENTATION.pdf**      
+
+  **RECOMMENDATION &       Strategic summary and execution plan
+  STRATEGY.pdf**           
+
+  **email_AT.py**          Automated HTML email sender for all clusters
+
+  **testemail.py**         Test version of email script
+  -------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+## 6. Setup & Execution
+
+### 1. Clone Repository
+
+``` bash
+git clone <repository-url>
 ```
 
-## 📊 Campaign Timeline
+### 2. Install Dependencies
 
-For current configuration (rows 606-640 = 34 emails):
-- **Duration**: ~7 minutes
-- **Calculation**: 34 emails × 12 seconds = 408 seconds (~7 min)
-
-For a full 200-email batch:
-- **Duration**: ~45-50 minutes
-- **Includes**: Batch delays between every 50 emails
-
-## 📝 Example CSV Format
-
-```csv
-Buyer email,Buyer first name
-john.doe@example.com,John
-jane.smith@example.com,Jane
-alex.jones@example.com,Alex
-sarah.wilson@example.com,
-```
-*Note: Missing first names will default to "there"*
-
-## 🔍 Monitoring Output
-
-```
-📧 Preparing to send 34 emails...
-
-🚀 Starting Batch 1 (34 emails)...
-✅ [1/34] Sent to john.doe@example.com
-✅ [2/34] Sent to jane.smith@example.com
-❌ Failed for invalid@email.com: [Error message]
-
-==================================================
-🎯 Email Campaign Complete!
-📧 Total sent: 33
-❌ Failed: 1
-⏱️  Duration: 0:06:48
-==================================================
+``` bash
+pip install pandas numpy scikit-learn matplotlib seaborn NameGenderPredictor
 ```
 
-## 🐛 Troubleshooting
+### 3. Prepare Data
 
-### "Authentication failed"
-- Verify app password is correct
-- Ensure 2FA is enabled
+-   Place the raw Excel file (e.g., Orders\_....xlsx) in the correct
+    folder\
+-   Update the path in `AFRO-EXPRESS.ipynb`
 
-### "Daily sending limit exceeded"
-- Wait 24 hours
-- Reduce batch size or split across more days
+### 4. Run the Notebook
 
-### Emails going to spam
-- Reduce sending rate (increase `EMAIL_DELAY`)
-- Add unsubscribe link
-- Warm up account with smaller batches
-
-### "Connection timeout"
-- Check internet connection
-- Verify firewall settings (port 465)
-
-## 🔐 Security Best Practices
-
-1. **Never commit credentials** to GitHub/Git
-2. **Use environment variables**:
-   ```python
-   import os
-   SENDER_PASSWORD = os.getenv('EMAIL_APP_PASSWORD')
-   ```
-3. **Add to .gitignore**:
-   ```
-   remaining_attendees.csv
-   *.env
-   config.py
-   ```
-
-## 📈 Campaign Workflow
-
-### Complete Multi-File Campaign Strategy
-
-1. **Day 1**: Run `testemail.py` (250 segmented customers)
-   - Target: High-value clusters
-   - Personalized messaging
-   
-2. **Day 2**: Run `email_AT.py` rows 0-200 (200 general attendees)
-   - Standard promotional message
-   
-3. **Day 3**: Run `email_AT.py` rows 200-400 (200 more attendees)
-
-4. **Day 4**: Run `email_AT.py` rows 400-640 (remaining attendees)
-
-### Why This Approach?
-- **Prioritizes high-value customers** (clustered data first)
-- **Stays within Gmail limits** (200-250/day)
-- **Reduces spam risk** (gradual sending)
-- **Maximizes deliverability** (warm sending pattern)
-
-## 🆚 When to Use Each Script
-
-| Scenario | Use Script | Reason |
-|----------|-----------|---------|
-| Past buyers with purchase history | `testemail.py` | Cluster-based targeting |
-| New attendees | `email_AT.py` | No behavioral data yet |
-| General promotion | `email_AT.py` | Same message for all |
-| VIP/Repeat customers | `testemail.py` | Personalized approach |
-
-## 📚 Advanced Customization
-
-### Adding Tracking Parameters
-```python
-ticket_link = "https://posh.vip/e/event?utm_source=email&utm_campaign=lastcall"
+``` bash
+jupyter notebook
 ```
 
-### Multiple Message Variants
-Modify the function to A/B test:
-```python
-def get_email_content(first_name, variant='A'):
-    if variant == 'A':
-        subject = "Version A subject"
-    else:
-        subject = "Version B subject"
-    # ...
+Running the notebook will: - Clean the dataset\
+- Generate cluster labels\
+- Output processed CSV files
+
+### 5. Email Automation
+
+Update credentials in `email_AT.py`:
+
+``` python
+SENDER_EMAIL = "your_email"
+SENDER_PASSWORD = "your_app_password"
 ```
 
-### Unsubscribe Link
-```python
-body = f"""
-{your_content}
-<hr>
-<p style="font-size:10px;color:#666;">
-Don't want these emails? 
-<a href="https://your-unsubscribe-link.com">Unsubscribe</a>
-</p>
-"""
+Run:
+
+``` bash
+python email_AT.py
 ```
 
-## 📊 Results Tracking
+------------------------------------------------------------------------
 
-After campaign completion, monitor:
-- ✅ Delivery success rate
-- ❌ Failed sends (and why)
-- 📈 Ticket sales (check Posh.vip analytics)
-- 📧 Open rates (requires tracking pixels)
-- 🎯 Click-through rates (UTM parameters)
+## 7. Contact
 
-## 🤝 Support
-
-For issues:
-1. Check Gmail SMTP settings
-2. Verify CSV format
-3. Review error messages in output
-4. Test with 5-10 emails first
-
----
-
-**Part of Afro-Express Email Campaign System** 🎉
-- `testemail.py` → Segmented customers
-- `email_AT.py` → General attendees (this file)
+For inquiries, collaborations, or consulting opportunities:\
+**Developer:** Jay
