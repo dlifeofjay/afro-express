@@ -10,12 +10,18 @@ df = pd.read_csv("remaining_attendees.csv")
 df = df.drop_duplicates(subset='Buyer email', keep='first')
 
 # START FROM ROW 251 TO THE END
-df = df.iloc[606:640]  # just the 400 for today
-print(f"📧 Preparing to send {len(df)} emails...")
+df = df.iloc[606:640]  # just the 400 batch for today
+print(f"Preparing to send {len(df)} emails...")
+
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # STEP 2: Define sender info
-SENDER_EMAIL = "afroexpressatx@gmail.com"
-SENDER_PASSWORD = "akqtskokwfcokskc"
+SENDER_EMAIL = os.getenv("SENDER_EMAIL")
+SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
 
 # Safety settings
 BATCH_SIZE = 50  # Send in batches
