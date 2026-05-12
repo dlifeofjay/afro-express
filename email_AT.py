@@ -4,6 +4,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import time
 from datetime import datetime
+import os
+from dotenv import load_dotenv
 
 # STEP 1: Load your dataset and start from row 251
 df = pd.read_csv("remaining_attendees.csv")
@@ -13,8 +15,6 @@ df = df.drop_duplicates(subset='Buyer email', keep='first')
 df = df.iloc[606:640]  # just the 400 batch for today
 print(f"Preparing to send {len(df)} emails...")
 
-import os
-from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
